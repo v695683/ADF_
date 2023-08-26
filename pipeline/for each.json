@@ -1,0 +1,60 @@
+{
+	"name": "for each",
+	"properties": {
+		"activities": [
+			{
+				"name": "ForEach1",
+				"type": "ForEach",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"items": {
+						"value": "@variables('number')",
+						"type": "Expression"
+					},
+					"isSequential": true,
+					"activities": [
+						{
+							"name": "Set variable1",
+							"type": "SetVariable",
+							"dependsOn": [],
+							"policy": {
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"variableName": "result",
+								"value": {
+									"value": "@{mul(item(),2)}",
+									"type": "Expression"
+								}
+							}
+						}
+					]
+				}
+			}
+		],
+		"variables": {
+			"number": {
+				"type": "Array",
+				"defaultValue": [
+					1,
+					2,
+					3,
+					4,
+					5
+				]
+			},
+			"result": {
+				"type": "String"
+			}
+		},
+		"folder": {
+			"name": "class_test"
+		},
+		"annotations": [],
+		"lastPublishTime": "2023-08-22T11:10:29Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

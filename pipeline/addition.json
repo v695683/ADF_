@@ -1,0 +1,82 @@
+{
+	"name": "addition",
+	"properties": {
+		"activities": [
+			{
+				"name": "breadth",
+				"type": "SetVariable",
+				"dependsOn": [],
+				"policy": {
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "breadth",
+					"value": "5"
+				}
+			},
+			{
+				"name": "length",
+				"type": "SetVariable",
+				"dependsOn": [],
+				"policy": {
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "length",
+					"value": "4"
+				}
+			},
+			{
+				"name": "area",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "breadth",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					},
+					{
+						"activity": "length",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "area",
+					"value": {
+						"value": "@\r\nstring(mul(int(variables('length')),int(variables('breadth'))))",
+						"type": "Expression"
+					}
+				}
+			}
+		],
+		"variables": {
+			"length": {
+				"type": "String"
+			},
+			"breadth": {
+				"type": "String"
+			},
+			"area": {
+				"type": "String"
+			}
+		},
+		"folder": {
+			"name": "class_test"
+		},
+		"annotations": [],
+		"lastPublishTime": "2023-08-22T11:10:29Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

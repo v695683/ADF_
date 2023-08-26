@@ -1,0 +1,82 @@
+{
+	"name": "a add b square",
+	"properties": {
+		"activities": [
+			{
+				"name": "a",
+				"type": "SetVariable",
+				"dependsOn": [],
+				"policy": {
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "a",
+					"value": "4"
+				}
+			},
+			{
+				"name": "b",
+				"type": "SetVariable",
+				"dependsOn": [],
+				"policy": {
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "b",
+					"value": "5"
+				}
+			},
+			{
+				"name": "a plus b squre",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "a",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					},
+					{
+						"activity": "b",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "result",
+					"value": {
+						"value": "@{mul(add(int(variables('a')),int(variables('b'))),add(int(variables('a')),int(variables('b'))))}",
+						"type": "Expression"
+					}
+				}
+			}
+		],
+		"variables": {
+			"a": {
+				"type": "String"
+			},
+			"b": {
+				"type": "String"
+			},
+			"result": {
+				"type": "String"
+			}
+		},
+		"folder": {
+			"name": "class_test"
+		},
+		"annotations": [],
+		"lastPublishTime": "2023-08-22T11:10:29Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

@@ -1,0 +1,29 @@
+{
+	"name": "paramter_wwith_Exicute",
+	"properties": {
+		"activities": [
+			{
+				"name": "Execute Pipeline1",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "Append",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"b": "5"
+					}
+				}
+			}
+		],
+		"folder": {
+			"name": "class_test"
+		},
+		"annotations": [],
+		"lastPublishTime": "2023-08-22T11:10:30Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

@@ -1,0 +1,82 @@
+{
+	"name": "area_from_L_and _B",
+	"properties": {
+		"activities": [
+			{
+				"name": "L",
+				"type": "SetVariable",
+				"dependsOn": [],
+				"policy": {
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "l",
+					"value": "5"
+				}
+			},
+			{
+				"name": "B",
+				"type": "SetVariable",
+				"dependsOn": [],
+				"policy": {
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "b",
+					"value": "10"
+				}
+			},
+			{
+				"name": "area",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "L",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					},
+					{
+						"activity": "B",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "area",
+					"value": {
+						"value": "@{mul(int(variables('l')),int(variables('b')))}",
+						"type": "Expression"
+					}
+				}
+			}
+		],
+		"variables": {
+			"l": {
+				"type": "String"
+			},
+			"b": {
+				"type": "String"
+			},
+			"area": {
+				"type": "String"
+			}
+		},
+		"folder": {
+			"name": "class_test"
+		},
+		"annotations": [],
+		"lastPublishTime": "2023-08-22T11:10:29Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}
