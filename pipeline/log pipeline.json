@@ -67,12 +67,61 @@
 					},
 					"firstRowOnly": false
 				}
+			},
+			{
+				"name": "Lookup2",
+				"type": "Lookup",
+				"dependsOn": [
+					{
+						"activity": "Set variable1",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderStoredProcedureName": "[dbo].[pl_end_log]",
+						"storedProcedureParameters": {
+							"errorMessage": {
+								"type": "String"
+							},
+							"id": {
+								"type": "Int32"
+							},
+							"status": {
+								"type": "String",
+								"value": ""
+							}
+						},
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "AzureSqlTable6",
+						"type": "DatasetReference"
+					},
+					"firstRowOnly": false
+				}
 			}
 		],
 		"variables": {
 			"starting_val": {
 				"type": "String",
 				"defaultValue": "started"
+			},
+			"sucess": {
+				"type": "String",
+				"defaultValue": "sucsessfull"
 			}
 		},
 		"folder": {
