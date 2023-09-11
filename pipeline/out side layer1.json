@@ -1,29 +1,9 @@
 {
-	"name": "for log",
+	"name": "out side layer1",
 	"properties": {
 		"activities": [
 			{
-				"name": "Execute Pipeline1",
-				"type": "ExecutePipeline",
-				"dependsOn": [
-					{
-						"activity": "Lookup1",
-						"dependencyConditions": [
-							"Succeeded"
-						]
-					}
-				],
-				"userProperties": [],
-				"typeProperties": {
-					"pipeline": {
-						"referenceName": "area_from_L_and _B_copy1",
-						"type": "PipelineReference"
-					},
-					"waitOnCompletion": true
-				}
-			},
-			{
-				"name": "Lookup1",
+				"name": "entry log",
 				"type": "Lookup",
 				"dependsOn": [],
 				"policy": {
@@ -69,6 +49,26 @@
 						"type": "DatasetReference"
 					},
 					"firstRowOnly": true
+				}
+			},
+			{
+				"name": "Execute Pipeline1",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "entry log",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "out side layer2",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
 				}
 			},
 			{
@@ -169,18 +169,8 @@
 				}
 			}
 		],
-		"variables": {
-			"sucess": {
-				"type": "String",
-				"defaultValue": "sucess"
-			},
-			"starting_val": {
-				"type": "String",
-				"defaultValue": "running"
-			}
-		},
 		"folder": {
-			"name": "store procedure"
+			"name": "store procedure/logs for nested pipeline"
 		},
 		"annotations": []
 	}
