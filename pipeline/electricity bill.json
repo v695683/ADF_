@@ -1,0 +1,82 @@
+{
+	"name": "electricity bill",
+	"properties": {
+		"activities": [
+			{
+				"name": "calcualation",
+				"type": "Switch",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"on": {
+						"value": "@pipeline().parameters.slab",
+						"type": "Expression"
+					},
+					"cases": [
+						{
+							"value": "s1",
+							"activities": [
+								{
+									"name": "200",
+									"type": "SetVariable",
+									"dependsOn": [],
+									"policy": {
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"variableName": "cost",
+										"value": {
+											"value": "@mul(pipeline().parameters.unit,5)",
+											"type": "Expression"
+										}
+									}
+								}
+							]
+						},
+						{
+							"value": "s2",
+							"activities": [
+								{
+									"name": "300",
+									"type": "SetVariable",
+									"dependsOn": [],
+									"policy": {
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"variableName": "cost",
+										"value": {
+											"value": "@add(mul(200,5),\nmul(sub(pipeline().parameters.unit,200),7\n))",
+											"type": "Expression"
+										}
+									}
+								}
+							]
+						}
+					]
+				}
+			}
+		],
+		"parameters": {
+			"unit": {
+				"type": "int"
+			},
+			"slab": {
+				"type": "string"
+			}
+		},
+		"variables": {
+			"cost": {
+				"type": "Integer"
+			}
+		},
+		"folder": {
+			"name": "HW"
+		},
+		"annotations": []
+	}
+}

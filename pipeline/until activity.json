@@ -1,0 +1,96 @@
+{
+	"name": "until activity",
+	"properties": {
+		"activities": [
+			{
+				"name": "Until2",
+				"type": "Until",
+				"dependsOn": [
+					{
+						"activity": "Set variable1",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"expression": {
+						"value": "@greater(variables('var'),5)",
+						"type": "Expression"
+					},
+					"activities": [
+						{
+							"name": "temp",
+							"type": "SetVariable",
+							"dependsOn": [],
+							"policy": {
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"variableName": "temp",
+								"value": {
+									"value": "@variables('var')",
+									"type": "Expression"
+								}
+							}
+						},
+						{
+							"name": "additon",
+							"type": "SetVariable",
+							"dependsOn": [
+								{
+									"activity": "temp",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"policy": {
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"variableName": "var",
+								"value": {
+									"value": "@add(variables('temp'),1)",
+									"type": "Expression"
+								}
+							}
+						}
+					],
+					"timeout": "0.12:00:00"
+				}
+			},
+			{
+				"name": "Set variable1",
+				"type": "SetVariable",
+				"dependsOn": [],
+				"policy": {
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "var",
+					"value": 1
+				}
+			}
+		],
+		"variables": {
+			"var": {
+				"type": "Integer"
+			},
+			"temp": {
+				"type": "Integer"
+			}
+		},
+		"folder": {
+			"name": "class_test"
+		},
+		"annotations": []
+	}
+}

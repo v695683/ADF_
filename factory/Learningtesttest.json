@@ -1,0 +1,9 @@
+{
+	"name": "Learningtesttest",
+	"location": "centralindia",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "83159a72-4ac0-4698-9270-b47dd63d909d",
+		"tenantId": "26fb0369-d2dc-4097-869c-84ea22925812"
+	}
+}

@@ -1,0 +1,186 @@
+{
+	"name": "table to array",
+	"properties": {
+		"activities": [
+			{
+				"name": "Lookup1",
+				"type": "Lookup",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "AzureSqlTable5",
+						"type": "DatasetReference"
+					},
+					"firstRowOnly": false
+				}
+			},
+			{
+				"name": "Set variable1",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "Lookup1",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "count",
+					"value": {
+						"value": "@activity('Lookup1').output.count",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "Until1",
+				"type": "Until",
+				"dependsOn": [
+					{
+						"activity": "Set variable1",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"expression": {
+						"value": "@greaterOrEquals(variables('current_record'),variables('count'))",
+						"type": "Expression"
+					},
+					"activities": [
+						{
+							"name": "Append values",
+							"type": "AppendVariable",
+							"dependsOn": [],
+							"userProperties": [],
+							"typeProperties": {
+								"variableName": "array",
+								"value": {
+									"value": "@activity('Lookup1').output.value[variables('current_record')].ename",
+									"type": "Expression"
+								}
+							}
+						},
+						{
+							"name": "Set temp",
+							"type": "SetVariable",
+							"dependsOn": [
+								{
+									"activity": "Append values",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"policy": {
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"variableName": "temp",
+								"value": {
+									"value": "@variables('current_record')",
+									"type": "Expression"
+								}
+							}
+						},
+						{
+							"name": "Set increment",
+							"type": "SetVariable",
+							"dependsOn": [
+								{
+									"activity": "Set temp",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"policy": {
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"variableName": "current_record",
+								"value": {
+									"value": "@add(variables('temp'),1)",
+									"type": "Expression"
+								}
+							}
+						}
+					],
+					"timeout": "0.12:00:00"
+				}
+			},
+			{
+				"name": "ouput",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "Until1",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "output",
+					"value": {
+						"value": "@variables('array')",
+						"type": "Expression"
+					}
+				}
+			}
+		],
+		"variables": {
+			"count": {
+				"type": "Integer"
+			},
+			"current_record": {
+				"type": "Integer",
+				"defaultValue": 0
+			},
+			"array": {
+				"type": "Array",
+				"defaultValue": []
+			},
+			"temp": {
+				"type": "Integer"
+			},
+			"output": {
+				"type": "Array"
+			}
+		},
+		"folder": {
+			"name": "HW"
+		},
+		"annotations": []
+	}
+}
