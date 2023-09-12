@@ -1,0 +1,37 @@
+{
+	"name": "electricty_switch",
+	"properties": {
+		"activities": [
+			{
+				"name": "Decide slab",
+				"type": "SetVariable",
+				"dependsOn": [],
+				"policy": {
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "slab",
+					"value": {
+						"value": "@if(lessOrEquals(variables('units'),100),1,\n        if(greaterOrEquals(variables('units'),300),3 ,2 ))",
+						"type": "Expression"
+					}
+				}
+			}
+		],
+		"variables": {
+			"units": {
+				"type": "Integer",
+				"defaultValue": 300
+			},
+			"slab": {
+				"type": "Integer"
+			}
+		},
+		"folder": {
+			"name": "HW"
+		},
+		"annotations": []
+	}
+}
