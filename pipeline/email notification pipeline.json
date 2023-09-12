@@ -60,7 +60,7 @@
 				}
 			},
 			{
-				"name": "Web1",
+				"name": "start email send",
 				"type": "WebActivity",
 				"dependsOn": [
 					{
@@ -88,9 +88,16 @@
 				}
 			},
 			{
-				"name": "start email_copy1",
+				"name": "sucess email_copy1",
 				"type": "Lookup",
-				"dependsOn": [],
+				"dependsOn": [
+					{
+						"activity": "Execute Pipeline1",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
 				"policy": {
 					"timeout": "0.12:00:00",
 					"retry": 0,
@@ -125,7 +132,7 @@
 							"status": {
 								"type": "String",
 								"value": {
-									"value": "@variables('status_start')",
+									"value": "@variables('status_sucess')",
 									"type": "Expression"
 								}
 							},
@@ -143,20 +150,160 @@
 					},
 					"firstRowOnly": false
 				}
+			},
+			{
+				"name": "sucess email send",
+				"type": "WebActivity",
+				"dependsOn": [
+					{
+						"activity": "sucess email_copy1",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"url": "https://prod-30.centralindia.logic.azure.com:443/workflows/d02cfe8a747b43a09db83cee84ff1b10/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=mf_C-Eh003gaTu870g1uF_i1bXhB7_-VbAR3rc15i6o",
+					"method": "POST",
+					"body": {
+						"value": "@concat('{\n    \"to\":\"',activity('sucess email_copy1').output.value[0].recipent,'\",\n    \"subject\":\"',activity('sucess email_copy1').output.value[0].subject,'\", \"body1\":\"',activity('sucess email_copy1').output.value[0].body,'\"\n}')",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "fail emal",
+				"type": "Lookup",
+				"dependsOn": [
+					{
+						"activity": "Execute Pipeline1",
+						"dependencyConditions": [
+							"Failed"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderStoredProcedureName": "[dbo].[start_email]",
+						"storedProcedureParameters": {
+							"ADFName": {
+								"type": "String",
+								"value": {
+									"value": "@pipeline().DataFactory",
+									"type": "Expression"
+								}
+							},
+							"ErrorMessage": {
+								"type": "String",
+								"value": null
+							},
+							"pipelineName": {
+								"type": "String",
+								"value": {
+									"value": "@pipeline().Pipeline",
+									"type": "Expression"
+								}
+							},
+							"status": {
+								"type": "String",
+								"value": {
+									"value": "@variables('status_fail')",
+									"type": "Expression"
+								}
+							},
+							"trigertime": {
+								"type": "DateTime",
+								"value": null
+							}
+						},
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "AzureSqlTable7",
+						"type": "DatasetReference"
+					},
+					"firstRowOnly": false
+				}
+			},
+			{
+				"name": "fail email send_copy1",
+				"type": "WebActivity",
+				"dependsOn": [
+					{
+						"activity": "fail emal",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"url": "https://prod-30.centralindia.logic.azure.com:443/workflows/d02cfe8a747b43a09db83cee84ff1b10/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=mf_C-Eh003gaTu870g1uF_i1bXhB7_-VbAR3rc15i6o",
+					"method": "POST",
+					"body": {
+						"value": "@concat('{\n    \"to\":\"',activity('fail emal').output.value[0].recipent,'\",\n    \"subject\":\"',activity('fail emal').output.value[0].subject,'\", \"body1\":\"',activity('fail emal').output.value[0].body,'\",\n    \"error\":\"',activity('Execute Pipeline1').Error.message,'\"\n}')\n",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "Execute Pipeline1",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "start email send",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "area_from_L_and _B_copy1",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
 			}
 		],
 		"variables": {
 			"status_start": {
 				"type": "String",
-				"defaultValue": "START"
+				"defaultValue": "start"
 			},
 			"status_sucess": {
 				"type": "String",
-				"defaultValue": "SUCSESS"
+				"defaultValue": "sucess"
 			},
 			"status_fail": {
 				"type": "String",
-				"defaultValue": "FAILED"
+				"defaultValue": "failed"
 			}
 		},
 		"folder": {
