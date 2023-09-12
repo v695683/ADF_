@@ -77,7 +77,72 @@
 					"secureOutput": false,
 					"secureInput": false
 				},
-				"userProperties": []
+				"userProperties": [],
+				"typeProperties": {
+					"url": "https://prod-30.centralindia.logic.azure.com:443/workflows/d02cfe8a747b43a09db83cee84ff1b10/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=mf_C-Eh003gaTu870g1uF_i1bXhB7_-VbAR3rc15i6o",
+					"method": "POST",
+					"body": {
+						"value": "@concat('{\n    \"to\":\"',activity('start email').output.value[0].recipent,'\",\n    \"subject\":\"',activity('start email').output.value[0].subject,'\", \"body1\":\"',activity('start email').output.value[0].body,'\"\n}')",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "start email_copy1",
+				"type": "Lookup",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderStoredProcedureName": "[dbo].[start_email]",
+						"storedProcedureParameters": {
+							"ADFName": {
+								"type": "String",
+								"value": {
+									"value": "@pipeline().DataFactory",
+									"type": "Expression"
+								}
+							},
+							"ErrorMessage": {
+								"type": "String",
+								"value": null
+							},
+							"pipelineName": {
+								"type": "String",
+								"value": {
+									"value": "@pipeline().Pipeline",
+									"type": "Expression"
+								}
+							},
+							"status": {
+								"type": "String",
+								"value": {
+									"value": "@variables('status_start')",
+									"type": "Expression"
+								}
+							},
+							"trigertime": {
+								"type": "DateTime",
+								"value": null
+							}
+						},
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "AzureSqlTable7",
+						"type": "DatasetReference"
+					},
+					"firstRowOnly": false
+				}
 			}
 		],
 		"variables": {
