@@ -3,7 +3,7 @@
 	"properties": {
 		"activities": [
 			{
-				"name": "email test",
+				"name": "notifiaction",
 				"type": "WebActivity",
 				"dependsOn": [],
 				"policy": {
@@ -18,7 +18,7 @@
 					"url": "https://prod-30.centralindia.logic.azure.com:443/workflows/d02cfe8a747b43a09db83cee84ff1b10/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=mf_C-Eh003gaTu870g1uF_i1bXhB7_-VbAR3rc15i6o",
 					"method": "POST",
 					"body": {
-						"value": "{\n    \"to\":\"@{variables('to')}\",\n    \"subject\":\"Testing main\",\n    \"body1\": \"Hi This is testing email from ADF\"\n}",
+						"value": "{\n    \"to\":\"@{variables('to')}\",\n    \"subject\":\"This is test email\",\n    \"body1\":\"This is first email testing\"\n}",
 						"type": "Expression"
 					}
 				}
@@ -31,7 +31,7 @@
 			}
 		},
 		"folder": {
-			"name": "email notification"
+			"name": "email notifiaction"
 		},
 		"annotations": []
 	}
